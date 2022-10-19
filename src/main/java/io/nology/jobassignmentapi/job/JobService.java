@@ -30,21 +30,17 @@ public class JobService {
 
     public Job create(JobCreateDTO dto){
         
-        //, 
-        //dto.getTemp()
-
         if(dto.getTemp() != null) {
             Optional<Temp> temp = this.tempRepository.findById(dto.getTemp());
 
             if(!temp.isEmpty()){
-                 Job newJob = new Job(dto.getName(), dto.getStartDate(), dto.getEndDate(), temp.get());
-            this.jobRepository.save(newJob);
-            return newJob;
+                Job newJob = new Job(dto.getName(), dto.getStartDate(), dto.getEndDate(),temp.get());
+                this.jobRepository.save(newJob);
+                return newJob;
             } else {
                 Job newJob = new Job(dto.getName(), dto.getStartDate(), dto.getEndDate());
-              this.jobRepository.save(newJob);
-            return newJob;
-
+                this.jobRepository.save(newJob);
+                return newJob;
             }
 
         } else {
@@ -78,4 +74,37 @@ public class JobService {
 
 
     }   
+
+    public Optional<Job> updateJob(JobUpdateDTO data, Long id) {
+        Optional<Job> exisitingJob = this.jobRepository.findById(id);
+
+        if(!exisitingJob.isEmpty()) {
+            // Job jobToUpdate = exisitingJob.get();
+            if(data.getName() != null) {
+                exisitingJob.get().setName(data.getName());
+            }
+            // start date can't be after end date, check that
+            if(data.getStartDate() != null){
+                if(exisitingJob.get().getEndDate().isAfter(data.getStartDate())){
+                    exisitingJob.get().setStartDate(data.getStartDate());
+                }
+            }
+
+            if(data.getEndDate() != null) {
+                exisitingJob.get().setEndDate(data.getEndDate());
+            }
+
+            if(data.getTempId() != null) {
+                Optional<Temp> tempToAssing = this.tempRepository.findById(data.getTempId());
+
+                if(!tempToAssing.isEmpty()){
+                    exisitingJob.get().setTemp(tempToAssing.get());
+                } 
+                // what should happe if temp with id does not exist?
+            }
+            this.jobRepository.save(exisitingJob.get());
+            return exisitingJob;
+        }
+       return exisitingJob;
+    }
 }

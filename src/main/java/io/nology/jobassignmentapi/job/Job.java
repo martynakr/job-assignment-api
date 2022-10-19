@@ -1,6 +1,7 @@
 package io.nology.jobassignmentapi.job;
 
-import java.util.Date;
+
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import io.nology.jobassignmentapi.temp.Temp;
 
@@ -27,26 +30,26 @@ public class Job {
     private String name;
 
     @Column
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column
-    private Date endDate;
+    private LocalDate endDate;
 
-    @ManyToOne
-    //(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("jobs")
+    @ManyToOne(cascade = CascadeType.ALL)
     // @Cascade(CascadeType.SAVE_UPDATE) 
     @JoinColumn(name="temp_id", referencedColumnName = "tempId")
     private Temp temp;
 
     public Job(){};
-    
-    public Job(String name, Date startDate, Date endDate ) {
+
+    public Job(String name, LocalDate startDate, LocalDate endDate ) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         //this.temp = temp;
     }
-        public Job(String name, Date startDate, Date endDate, Temp temp ) {
+        public Job(String name, LocalDate startDate, LocalDate endDate, Temp temp ) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -62,11 +65,11 @@ public class Job {
         return name;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
    public Temp getTemp() {
@@ -77,11 +80,11 @@ public class Job {
         this.name = name;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
     public void setTemp(Temp temp) {

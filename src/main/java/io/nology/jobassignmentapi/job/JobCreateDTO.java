@@ -1,11 +1,9 @@
 package io.nology.jobassignmentapi.job;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
-
-import io.nology.jobassignmentapi.temp.Temp;
 
 public class JobCreateDTO {
     
@@ -13,17 +11,15 @@ public class JobCreateDTO {
     private String name;
 
     @NonNull
-    private Date startDate;
+    private LocalDate startDate;
 
     @NonNull
-    Date endDate;
-
-    // Temp temp;
+    private LocalDate endDate;
 
     @Nullable
     private Long temp;
 
-    public JobCreateDTO(String name, Date startDate, Date endDate) {
+    public JobCreateDTO(String name, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -34,11 +30,11 @@ public class JobCreateDTO {
         return name;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
@@ -46,11 +42,11 @@ public class JobCreateDTO {
         this.name = name;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 
@@ -61,15 +57,5 @@ public class JobCreateDTO {
     public void setTemp(Long tempId) {
         this.temp = tempId;
     }
-
-    
-
-    // public Temp getTemp() {
-    //     return temp;
-    // }
-
-    // public void setTemp(Temp temp) {
-    //     this.temp = temp;
-    // }
 
 }

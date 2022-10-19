@@ -1,5 +1,6 @@
 package io.nology.jobassignmentapi.job;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +38,7 @@ public class JobController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Job> findById(@PathVariable Long id){
+    
         Optional<Job> foundJob = this.jobService.findById(id);
         if(foundJob.isEmpty()){
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -45,10 +48,19 @@ public class JobController {
     }
     
     @GetMapping("/jobs")
-    public ResponseEntity<List<Job>> findByTempAssiged(@RequestParam("assigned") boolean tempAssigned){
+    public ResponseEntity<List<Job>> findByTempAssiged(@RequestParam(value="assigned", required = false) boolean tempAssigned){
+        System.out.println(tempAssigned);
             Optional<List<Job>> jobsWithTemps = this.jobService.findByTempValue(tempAssigned);
             return new ResponseEntity<>(jobsWithTemps.get(), HttpStatus.OK);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Job> updateEmployee(@PathVariable Long id, @RequestBody JobUpdateDTO data){
+        Optional<Job> updatedJob = this.jobService.updateJob(data, id);
+    if(updatedJob.isEmpty()){
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    }
+        return new ResponseEntity<>(updatedJob.get(), HttpStatus.OK);
+    }
 
 }
